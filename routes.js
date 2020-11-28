@@ -12,6 +12,10 @@ module.exports = function(app) {
         .get(todoList.kendaraan);
     app.route('/createkendaraan')
         .post(todoList.createkendaraan);
+    app.route('/updatekendaraan')
+        .post(todoList.updatekendaraan);
+    app.route('/deletekendaraan')
+        .post(todoList.deletekendaraan);
     app.route('/suku_cadang')
         .get(todoList.suku_cadang); 
     app.route('/sc_keluar')

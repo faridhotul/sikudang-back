@@ -22,7 +22,7 @@ exports.kendaraan = function(req, res) {
     });
 };
 exports.createkendaraan = function(req, res) {
-    
+    console.log(req.body)
     var plat_kend = req.body.plat_kend;
 
     connection.query('INSERT INTO kendaraan (plat_kend) values (?)',
@@ -33,6 +33,37 @@ exports.createkendaraan = function(req, res) {
             response.failed("Belum berhasil", res)
         } else{
             response.ok("Berhasil menambahkan kendaraan!", res)
+        }
+    });
+};
+exports.updatekendaraan = function(req, res) {
+    console.log(req.body)
+    var id_kend = req.body.id_kend;
+    var plat_kend = req.body.plat_kend;
+
+    connection.query('UPDATE kendaraan SET plat_kend = ? WHERE id_kend = ?',
+    [ plat_kend , id_kend ], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+            response.failed("Belum berhasil", res)
+        } else{
+            response.ok("Berhasil mengedit kendaraan!", res)
+        }
+    });
+};
+exports.deletekendaraan = function(req, res) {
+    console.log(req.body)
+    var id_kend = req.body.id_kend;
+
+    connection.query('DELETE FROM kendaraan WHERE id_kend = ?',
+    [ id_kend ],
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+            response.failed("Belum berhasil", res)
+        } else{
+            response.ok("Berhasil menghapus kendaraan!", res)
         }
     });
 };
