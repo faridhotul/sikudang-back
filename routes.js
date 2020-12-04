@@ -18,8 +18,20 @@ module.exports = function(app) {
         .post(todoList.deletekendaraan);
     app.route('/suku_cadang')
         .get(todoList.suku_cadang); 
+    app.route('/createsukucadang')
+        .post(todoList.createsukucadang);
+    app.route('/updatesukucadang')
+        .post(todoList.updatesukucadang); 
+    app.route('/deletesukucadang')
+        .post(todoList.deletesukucadang);
     app.route('/sc_keluar')
         .get(todoList.sc_keluar);
+    app.route('/createsc_keluar')
+        .post(todoList.createsc_keluar);
+    app.route('/updatesc_keluar')
+        .post(todoList.updatesc_keluar);
+    app.route('/deletesc_keluar')
+        .post(todoList.deletesc_keluar);
     app.route('/sc_masuk')
         .get(todoList.sc_masuk);
     app.route('/permintaan_sc')
