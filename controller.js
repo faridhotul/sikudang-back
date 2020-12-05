@@ -326,7 +326,20 @@ exports.updatestatuspermintaan = function(req, res) {
             console.log(error)
             response.failed("Belum berhasil", res)
         } else{
-            response.ok("Berhasil mengedit status permintaan!", res)
+            if(status_per_sc==='Disetujui'){
+            connection.query('INSERT INTO sc_keluar (id_sc, jml_sc_kel, tgl_sc_kel, id_kend, id_user) SELECT id_sc, jml_per_sc, NOW(), id_kend, id_user FROM permintaan_sc WHERE id_per_sc= ?',
+            [ id_per_sc ], 
+            function (error, rows, fields){
+                if(error){
+                    console.log(error)
+                    response.failed("Belum berhasil", res)
+                } else{
+                    response.ok("Permintaan disetujui!", res)
+                }
+            });
+        }else{response.ok("Permintaan ditolak!", res)
+        }
+ 
         }
     });
 };
@@ -341,10 +354,30 @@ exports.riwayat_permintaan = function(req, res) {
     });
 };
 exports.lap_kel_msk = function(req, res) {
-    connection.query('SELECT id_lap, s.nama_sc, sm.jml_sc_msk,  sk.jml_sc_kel, stock_akhir FROM lap_kel_msk l JOIN suku_cadang s ON l.id_sc = s.id_sc JOIN sc_keluar sk ON l.id_kel = sk.id_kel JOIN sc_masuk sm ON l.id_msk = sm.id_msk', function (error, rows, fields){
+    connection.query(`
+    SELECT 
+        sc.id_sc,
+        sc.nama_sc,
+        (
+        SELECT IFNULL(SUM(m.jml_sc_msk), 0) 
+        FROM sc_masuk m 
+        WHERE m.id_sc = sc.id_sc
+        ) AS 'jml_sc_msk',
+        (
+        SELECT IFNULL(SUM(k.jml_sc_kel), 0) 
+        FROM sc_keluar k 
+        WHERE k.id_sc = sc.id_sc
+        ) AS 'jml_sc_kel'
+    FROM
+        suku_cadang sc
+  
+    `, function (error, rows, fields){
         if(error){
             console.log(error)
-        } else{
+        } else {
+            for (var i = 0; i < rows.length ; i++) {
+                rows[i].stock_akhir = rows[i].jml_sc_msk - rows[i].jml_sc_kel
+            }
             response.ok(rows, res)
         }
     });
