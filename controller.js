@@ -125,7 +125,7 @@ exports.deletesukucadang = function(req, res) {
     });
 };
 exports.sc_keluar = function(req, res) {
-    connection.query('SELECT sk.jml_sc_kel,sk.tgl_sc_kel, s.nama_sc, k.plat_kend, u.nama_user FROM sc_keluar sk JOIN suku_cadang s ON sk.id_sc = s.id_sc JOIN kendaraan k ON sk.id_kend = k.id_kend JOIN user u ON sk.id_user = u.id_user', function (error, rows, fields){
+    connection.query('SELECT sk.id_kel, sk.jml_sc_kel,sk.tgl_sc_kel, s.id_sc, s.nama_sc, k.id_kend, k.plat_kend, u.id_user, u.nama_user FROM sc_keluar sk JOIN suku_cadang s ON sk.id_sc = s.id_sc JOIN kendaraan k ON sk.id_kend = k.id_kend JOIN user u ON sk.id_user = u.id_user', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -188,16 +188,68 @@ exports.deletesc_keluar = function(req, res) {
     });
 };
 exports.sc_masuk = function(req, res) {
-    connection.query('SELECT sm.jml_sc_msk,sm.tgl_sc_msk, s.nama_sc FROM sc_masuk sm  JOIN suku_cadang s ON sm.id_sc = s.id_sc', function (error, rows, fields){
+    connection.query('SELECT sm.id_msk, sm.jml_sc_msk,sm.tgl_sc_msk, s.id_sc, s.nama_sc FROM sc_masuk sm  JOIN suku_cadang s ON sm.id_sc = s.id_sc', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
             response.ok(rows, res)
+        }
+    });
+};
+exports.createsc_masuk = function(req, res) {
+    console.log(req.body)
+    var jml_sc_msk = req.body.jml_sc_msk;
+    var tgl_sc_msk = req.body.tgl_sc_msk;
+    var id_sc = req.body.id_sc;
+
+    connection.query('INSERT INTO sc_masuk (jml_sc_msk, tgl_sc_msk, id_sc) values (?,?,?)',
+    [ jml_sc_msk, tgl_sc_msk, id_sc ], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+            response.failed("Belum berhasil", res)
+        } else{
+            response.ok("Berhasil menambahkan suku cadang masuk!", res)
+        }
+    });
+};
+
+exports.updatesc_masuk = function(req, res) {
+    console.log(req.body)
+    var id_msk = req.body.id_msk;
+    var jml_sc_msk = req.body.jml_sc_msk;
+    var tgl_sc_msk = req.body.tgl_sc_msk;
+    var id_sc = req.body.id_sc;
+
+    connection.query('UPDATE sc_masuk SET id_sc = ?, jml_sc_msk = ?, tgl_sc_msk = ? WHERE id_msk = ?',
+    [ id_sc, jml_sc_msk, tgl_sc_msk, id_msk ], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+            response.failed("Belum berhasil", res)
+        } else{
+            response.ok("Berhasil mengedit suku cadang masuk!", res)
+        }
+    });
+};
+
+exports.deletesc_masuk = function(req, res) {
+    console.log(req.body)
+    var id_msk = req.body.id_msk;
+
+    connection.query('DELETE FROM sc_masuk WHERE id_msk = ?',
+    [ id_msk ],
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+            response.failed("Belum berhasil", res)
+        } else{
+            response.ok("Berhasil menghapus Suku Cadang masuk!", res)
         }
     });
 };
 exports.permintaan_sc = function(req, res) {
-    connection.query('SELECT p.jml_per_sc, p.tgl_per_sc, p.status_per_sc, s.id_sc, s.nama_sc, k.id_kend, k.plat_kend, u.id_user, u.nama_user FROM permintaan_sc p JOIN suku_cadang s ON p.id_sc = s.id_sc JOIN kendaraan k ON p.id_kend = k.id_kend JOIN user u ON p.id_user = u.id_user', function (error, rows, fields){
+    connection.query('SELECT p.id_per_sc, p.jml_per_sc, p.tgl_per_sc, p.status_per_sc, s.id_sc, s.nama_sc, k.id_kend, k.plat_kend, u.id_user, u.nama_user FROM permintaan_sc p JOIN suku_cadang s ON p.id_sc = s.id_sc JOIN kendaraan k ON p.id_kend = k.id_kend JOIN user u ON p.id_user = u.id_user', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -205,6 +257,80 @@ exports.permintaan_sc = function(req, res) {
         }
     });
 };
+exports.createpermintaan_sc = function(req, res) {
+    console.log(req.body)
+    var id_sc = req.body.id_sc;
+    var jml_per_sc = req.body.jml_per_sc;
+    var id_kend = req.body.id_kend;
+    var id_user = req.body.id_user;
+    var tgl_per_sc = req.body.tgl_per_sc;
+    var status_per_sc = req.body.status_per_sc;
+
+    connection.query('INSERT INTO permintaan_sc (id_sc, jml_per_sc, id_kend, id_user, tgl_per_sc, status_per_sc) values (?,?,?,?,?,?)',
+    [ id_sc, jml_per_sc, id_kend, id_user, tgl_per_sc, status_per_sc ], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+            response.failed("Belum berhasil", res)
+        } else{
+            response.ok("Berhasil menambahkan permintaan suku cadang!", res)
+        }
+    });
+};
+
+exports.updatepermintaan_sc = function(req, res) {
+    console.log(req.body)
+    var id_per_sc = req.body.id_per_sc;
+    var id_sc = req.body.id_sc;
+    var jml_per_sc = req.body.jml_per_sc;
+    var id_kend = req.body.id_kend;
+    var id_user = req.body.id_user;
+    var tgl_per_sc = req.body.tgl_per_sc;
+
+    connection.query('UPDATE permintaan_sc SET id_sc = ?, jml_per_sc = ?, id_kend = ?, id_user = ?, tgl_per_sc = ? WHERE id_per_sc = ?',
+    [ id_sc, jml_per_sc, id_kend, id_user, tgl_per_sc , id_per_sc], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+            response.failed("Belum berhasil", res)
+        } else{
+            response.ok("Berhasil mengedit permintaan suku cadang!", res)
+        }
+    });
+};
+
+exports.deletepermintaan_sc = function(req, res) {
+    console.log(req.body)
+    var id_per_sc = req.body.id_per_sc;
+
+    connection.query('DELETE FROM permintaan_sc WHERE id_per_sc = ?',
+    [ id_per_sc ],
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+            response.failed("Belum berhasil", res)
+        } else{
+            response.ok("Berhasil menghapus permintaan suku cadang!", res)
+        }
+    });
+};
+exports.updatestatuspermintaan = function(req, res) {
+    console.log(req.body)
+    var id_per_sc = req.body.id_per_sc;
+    var status_per_sc = req.body.status_per_sc;
+
+    connection.query('UPDATE permintaan_sc SET status_per_sc = ? WHERE id_per_sc = ?',
+    [ status_per_sc, id_per_sc], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+            response.failed("Belum berhasil", res)
+        } else{
+            response.ok("Berhasil mengedit status permintaan!", res)
+        }
+    });
+};
+
 exports.riwayat_permintaan = function(req, res) {
     connection.query('SELECT id_riw, p.jml_per_sc, p.tgl_per_sc, p.status_per_sc, s.nama_sc, k.plat_kend, u.nama_user FROM riwayat_permintaan rw JOIN permintaan_sc p ON p.id_per_sc = rw.id_per_sc JOIN suku_cadang s ON p.id_sc = s.id_sc JOIN kendaraan k ON p.id_kend = k.id_kend JOIN USER u ON p.id_user = u.id_user', function (error, rows, fields){
         if(error){

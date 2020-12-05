@@ -34,8 +34,22 @@ module.exports = function(app) {
         .post(todoList.deletesc_keluar);
     app.route('/sc_masuk')
         .get(todoList.sc_masuk);
+    app.route('/createsc_masuk')
+        .post(todoList.createsc_masuk);
+    app.route('/updatesc_masuk')
+        .post(todoList.updatesc_masuk);
+    app.route('/deletesc_masuk')
+        .post(todoList.deletesc_masuk);
     app.route('/permintaan_sc')
         .get(todoList.permintaan_sc);
+    app.route('/createpermintaan_sc')
+        .post(todoList.createpermintaan_sc);
+    app.route('/updatepermintaan_sc')
+        .post(todoList.updatepermintaan_sc);
+    app.route('/updatestatuspermintaan')
+        .post(todoList.updatestatuspermintaan);
+    app.route('/deletepermintaan_sc')
+        .post(todoList.deletepermintaan_sc);
     app.route('/riwayat_permintaan')
         .get(todoList.riwayat_permintaan);
     app.route('/lap_kel_msk')
