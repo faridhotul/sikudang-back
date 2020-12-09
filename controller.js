@@ -11,6 +11,7 @@ exports.login = function(req, res) {
             console.log(error)
             response.faillogin("Belum berhasil login", res)
         } else{
+            console.log(rows)
             var password = 'siku'+req.body.password+'dang';
             var hash = crypto.createHash('md5').update(password).digest('hex');
             if (hash === rows[0].password){
@@ -26,6 +27,13 @@ exports.login = function(req, res) {
             }
         }
     });
+};
+exports.profile = function(req, res) {
+    if(req.user){
+        response.ok(req.user, res)
+    } else{
+        response.failed("Gagal profile", res)
+    }
 };
 exports.users = function(req, res) {
     connection.query('SELECT * FROM user', function (error, rows, fields){

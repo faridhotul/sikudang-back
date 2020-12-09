@@ -1,12 +1,37 @@
 'use strict';
 
+var jwt = require('jsonwebtoken');
+var response = require('./res');
+
 module.exports = function(app) {
     var todoList = require('./controller');
+
+    var cekLogin = function (req, res, next) {
+        try {
+            var token = req.get('authorization') || req.body.token || req.query.token
+            var decoded = jwt.verify(token, 'gnadukis');
+            req.user = decoded
+            console.log(decoded)
+            next()
+        } catch (error) {
+            response.faillogin('Belum login', res)
+        }      
+    }
+
+    var cekAdmin = function (req, res, next) {
+        if (req.user.tipe_user === 'Admin') {
+            next()
+        } else {
+            response.faillogin('Bukan Admin', res)
+        }
+    }
 
     app.route('/')
         .get(todoList.index);
     app.route('/login')
         .post(todoList.login);
+    app.route('/profile')
+        .get(cekLogin,todoList.profile);
     app.route('/users')
         .get(todoList.users);
     app.route('/kendaraan')
