@@ -5,7 +5,8 @@ module.exports = function(app) {
 
     app.route('/')
         .get(todoList.index);
-
+    app.route('/login')
+        .post(todoList.login);
     app.route('/users')
         .get(todoList.users);
     app.route('/kendaraan')

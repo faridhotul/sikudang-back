@@ -16,3 +16,12 @@ exports.failed = function(values, res) {
   res.json(data);
   res.end();
 };
+exports.faillogin = function(values, res) {
+  var data = {
+      'status': 401,
+      'values': values
+  };
+  res.status(401);
+  res.json(data);
+  res.end();
+};

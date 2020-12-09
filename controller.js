@@ -2,7 +2,31 @@
 
 var response = require('./res');
 var connection = require('./conn');
+var crypto = require('crypto');
+var jwt = require('jsonwebtoken');
 
+exports.login = function(req, res) {
+    connection.query('SELECT * FROM user WHERE username = ?', [req.body.username], function (error, rows, fields){
+        if(error){
+            console.log(error)
+            response.faillogin("Belum berhasil login", res)
+        } else{
+            var password = 'siku'+req.body.password+'dang';
+            var hash = crypto.createHash('md5').update(password).digest('hex');
+            if (hash === rows[0].password){
+                var token = jwt.sign({ 
+                    id_user: rows[0].id_user,
+                    username: rows[0].username,
+                    tipe_user: rows[0].tipe_user,
+                    nama_user: rows[0].nama_user
+                  }, 'gnadukis', { expiresIn: '20m' });
+                response.ok(token, res)
+            } else{
+                response.faillogin("Gagal", res)
+            }
+        }
+    });
+};
 exports.users = function(req, res) {
     connection.query('SELECT * FROM user', function (error, rows, fields){
         if(error){
@@ -382,6 +406,7 @@ exports.lap_kel_msk = function(req, res) {
         }
     });
 };
+
 
 exports.index = function(req, res) {
     response.ok("Hello from the Node JS RESTful side!", res)
