@@ -305,6 +305,10 @@ exports.createpermintaan_sc = function(req, res) {
             console.log(error)
             response.failed("Belum berhasil", res)
         } else{
+                req.io.emit('notif', {
+                    tipe_user: 'Admin',
+                    body:"Ada permintaan baru dari User " +req.user.nama_user
+                });
             response.ok("Berhasil menambahkan permintaan suku cadang!", res)
         }
     });
@@ -417,5 +421,9 @@ exports.lap_kel_msk = function(req, res) {
 
 
 exports.index = function(req, res) {
+    console.log(req.io)
+    req.io.emit('notif', {
+        body:"Berhasil menambahkan permintaan suku cadang!"
+    });
     response.ok("Hello from the Node JS RESTful side!", res)
 };
