@@ -44,61 +44,6 @@ exports.users = function (req, res) {
         }
     });
 };
-exports.kendaraan = function (req, res) {
-    connection.query('SELECT * FROM kendaraan', function (error, rows, fields) {
-        if (error) {
-            console.log(error)
-        } else {
-            response.ok(rows, res)
-        }
-    });
-};
-exports.createkendaraan = function (req, res) {
-    console.log(req.body)
-    var plat_kend = req.body.plat_kend;
-
-    connection.query('INSERT INTO kendaraan (plat_kend) values (?)',
-        [plat_kend],
-        function (error, rows, fields) {
-            if (error) {
-                console.log(error)
-                response.failed("Belum berhasil", res)
-            } else {
-                response.ok("Berhasil menambahkan kendaraan!", res)
-            }
-        });
-};
-exports.updatekendaraan = function (req, res) {
-    console.log(req.body)
-    var id_kend = req.body.id_kend;
-    var plat_kend = req.body.plat_kend;
-
-    connection.query('UPDATE kendaraan SET plat_kend = ? WHERE id_kend = ?',
-        [plat_kend, id_kend],
-        function (error, rows, fields) {
-            if (error) {
-                console.log(error)
-                response.failed("Belum berhasil", res)
-            } else {
-                response.ok("Berhasil mengedit kendaraan!", res)
-            }
-        });
-};
-exports.deletekendaraan = function (req, res) {
-    console.log(req.body)
-    var id_kend = req.body.id_kend;
-
-    connection.query('DELETE FROM kendaraan WHERE id_kend = ?',
-        [id_kend],
-        function (error, rows, fields) {
-            if (error) {
-                console.log(error)
-                response.failed("Belum berhasil", res)
-            } else {
-                response.ok("Berhasil menghapus kendaraan!", res)
-            }
-        });
-};
 exports.suku_cadang = function (req, res) {
     connection.query('SELECT * FROM suku_cadang', function (error, rows, fields) {
         if (error) {
@@ -280,6 +225,62 @@ exports.deletesc_masuk = function (req, res) {
             }
         });
 };
+exports.kendaraan = function (req, res) {
+    connection.query('SELECT * FROM kendaraan', function (error, rows, fields) {
+        if (error) {
+            console.log(error)
+        } else {
+            response.ok(rows, res)
+        }
+    });
+};
+exports.createkendaraan = function (req, res) {
+    console.log(req.body)
+    var plat_kend = req.body.plat_kend;
+
+    connection.query('INSERT INTO kendaraan (plat_kend) values (?)',
+        [plat_kend],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error)
+                response.failed("Belum berhasil", res)
+            } else {
+                response.ok("Berhasil menambahkan kendaraan!", res)
+            }
+        });
+};
+exports.updatekendaraan = function (req, res) {
+    console.log(req.body)
+    var id_kend = req.body.id_kend;
+    var plat_kend = req.body.plat_kend;
+
+    connection.query('UPDATE kendaraan SET plat_kend = ? WHERE id_kend = ?',
+        [plat_kend, id_kend],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error)
+                response.failed("Belum berhasil", res)
+            } else {
+                response.ok("Berhasil mengedit kendaraan!", res)
+            }
+        });
+};
+exports.deletekendaraan = function (req, res) {
+    console.log(req.body)
+    var id_kend = req.body.id_kend;
+
+    connection.query('DELETE FROM kendaraan WHERE id_kend = ?',
+        [id_kend],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error)
+                response.failed("Belum berhasil", res)
+            } else {
+                response.ok("Berhasil menghapus kendaraan!", res)
+            }
+        });
+};
+
 exports.permintaan_sc = function (req, res) {
     var query = "SELECT p.id_per_sc, p.jml_per_sc, p.tgl_per_sc, p.status_per_sc, s.id_sc, s.nama_sc, k.id_kend, k.plat_kend, u.id_user, u.nama_user FROM permintaan_sc p JOIN suku_cadang s ON p.id_sc = s.id_sc JOIN kendaraan k ON p.id_kend = k.id_kend JOIN user u ON p.id_user = u.id_user";
     var params = []
